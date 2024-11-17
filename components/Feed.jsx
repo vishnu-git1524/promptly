@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react'
+
 import PromptCard from './PromptCard'
 
 const PromptCardList = ({ data, handleTagClick }) => {
@@ -19,9 +20,8 @@ const PromptCardList = ({ data, handleTagClick }) => {
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // Track loading state
 
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState('')
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchedResults, setSearchedResults] = useState([]);
 
@@ -46,19 +46,18 @@ const Feed = () => {
   };
 
   const fetchPosts = async () => {
-    setIsLoading(true); // Set loading to true before fetch
     const response = await fetch('/api/prompt');
     const data = await response.json();
+
     setPosts(data);
-    setIsLoading(false); // Set loading to false after data is fetched
   }
 
   useEffect(() => {
     fetchPosts();
   }, [])
 
-  const filterPrompts = (searchText) => {
-    const regex = new RegExp(searchText, "i"); // 'i' flag for case-insensitive search
+  const filterPrompts = (searchtext) => {
+    const regex = new RegExp(searchtext, "i"); // 'i' flag for case-insensitive search
     return posts.filter(
       (item) =>
         regex.test(item.creator.username) ||
@@ -80,11 +79,7 @@ const Feed = () => {
         />
       </form>
 
-      {isLoading ? (
-        <div className="flex justify-center items-center mt-16">
-          <div className="w-16 h-16 border-4 border-t-4 border-gray-200 rounded-full animate-spin border-t-blue-500"></div>
-        </div>
-      ) : searchText ? (
+      {searchText ? (
         <PromptCardList
           data={searchedResults}
           handleTagClick={handleTagClick}
@@ -96,4 +91,4 @@ const Feed = () => {
   )
 }
 
-export default Feed;
+export default Feed

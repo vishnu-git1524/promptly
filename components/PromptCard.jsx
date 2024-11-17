@@ -1,6 +1,6 @@
-'use cliet';
+'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -11,15 +11,31 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
   const router = useRouter();
 
   const [copied, setCopied] = useState("");
+  const [scrollY, setScrollY] = useState(0); // State to track scroll position
 
   const handleCopy = () => {
     setCopied(post.prompt);
     navigator.clipboard.writeText(post.prompt);
     setTimeout(() => setCopied(""), 3000);
-  }
+  };
+
+  // Handle scroll event to update scrollY position
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY); // Update scrollY on scroll
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Add parallax effect by adjusting the translateY property based on scrollY
+  const parallaxStyle = {
+    transform: `translateY(${scrollY * 0.2}px)` // Change 0.2 to adjust the speed of the effect
+  };
 
   return (
-    <div className="prompt_card">
+    <div className="prompt_card" style={parallaxStyle}>
       <div className="flex justify-between items-start gap-5">
         <div className="flex-1 flex justify-start items-center gap-3 cursor-pointer">
           <Image 
@@ -80,7 +96,7 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
         </div>
       )}
     </div>
-  )
+  );
 }
 
-export default PromptCard
+export default PromptCard;
