@@ -30,8 +30,8 @@ const Nav = () => {
                 <Image
                     src="/assets/images/image.svg"
                     alt="Promptopia Logo"
-                    width={40}
-                    height={40}
+                    width={30}
+                    height={30}
                     className="object-contain"
                 />
                 <p className="logo_text">Promptly</p>
